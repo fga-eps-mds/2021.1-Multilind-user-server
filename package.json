@@ -1,0 +1,19 @@
+{
+  "name": "2021.1-Multilind-assets-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:fga-eps-mds/2021.1-Multilind-assets-server.git",
+  "author": "gabrieldvpereira <gdavi.gd@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^6.0.4"
+  },
+  "scripts": {
+    "start": "nodemon --exec sucrase-node src/server.js"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12",
+    "sucrase": "^3.20.1"
+  }
+}
