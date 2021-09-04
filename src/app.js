@@ -1,7 +1,5 @@
 import express from 'express'; 
 
-
-
 class Server { 
     constructor(){
         this.app = express(); 
@@ -12,7 +10,7 @@ class Server {
         this.app.use('/', (req, res) => {
             res.send("server is up!!"); 
         })
-    }; 
+    } 
 
     routes(){
         // call routes
