@@ -1,4 +1,5 @@
 import express from 'express'; 
+import './services/database'; 
 
 class Server { 
     constructor(){
