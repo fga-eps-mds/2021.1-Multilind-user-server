@@ -1,21 +1,26 @@
-import express from 'express'; 
-import './services/database'; 
+import "dotenv/config";
+import express from "express";
+import "./services/database";
+import cors from "cors";
+import { requestInfo } from "./middlewares";
+import { setUpRoutes } from "./routes";
 
-class Server { 
-    constructor(){
-        this.app = express(); 
-        this.middlewares(); 
-    }
+class App {
+  constructor() {
+    this.app = express();
+    this.middlewares();
+    this.routes();
+  }
 
-    middlewares(){
-        this.app.use('/', (req, res) => {
-            res.send("server is up!!"); 
-        })
-    } 
+  middlewares() {
+    this.app.use(requestInfo);
+    this.app.use(cors());
+    this.app.use(express.json());
+  }
 
-    routes(){
-        // call routes
-    }
+  routes() {
+    setUpRoutes(this.app);
+  }
 }
 
-export default new Server().app; 
+export default new App().app;

@@ -6,19 +6,23 @@
   "author": "gabrieldvpereira <gdavi.gd@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "mongoose": "^6.0.4"
   },
   "scripts": {
     "start": "nodemon --exec sucrase-node src/server.js",
-    "test": "jest", 
+    "test": "jest",
     "lint": "eslint --ext .js,.ts,.tsx src/"
   },
   "devDependencies": {
     "dotenv": "^10.0.0",
     "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.1.0",
     "nodemon": "^2.0.12",
+    "prettier": "^2.3.2",
     "sucrase": "^3.20.1"
   }
 }
