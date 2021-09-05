@@ -14,7 +14,12 @@ class App {
 
   middlewares() {
     this.app.use(requestInfo);
-    this.app.use(cors());
+    this.app.use(
+      cors({
+        origin: "*",
+        allowedHeaders: "*",
+      })
+    );
     this.app.use(express.json());
   }
 
