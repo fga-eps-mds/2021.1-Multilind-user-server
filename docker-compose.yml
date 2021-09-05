@@ -10,7 +10,7 @@ services:
         - .:/app/
         - /app/node_modules
       env_file:
-        - database.env
+        - .env
     
     mongo:
       image: mongo
