@@ -1,6 +1,6 @@
 <br>
 <br>
-<h1 align="center" >Multilind Servidor de Arquivos</h1>
+<h1 align="center" >Multilind Servidor de Usuários</h1>
 <br>
 <p align="center"><img width="200"src="src/assets/img/multilind.jpg"> </p>
 <p align="center"> Servidor para administrar a criação de usuários para o aplicativo <strong>Multilind</strong>.</p>
