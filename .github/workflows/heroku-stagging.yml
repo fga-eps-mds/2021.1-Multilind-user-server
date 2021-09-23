@@ -1,6 +1,6 @@
 # Your workflow name.
-name: Deploy to heroku.
-
+name: Deploy to heroku [STAGGING].
+ 
 on:
   push:
     branches: [stagging]
@@ -22,6 +22,6 @@ jobs:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: ${{ secrets.HEROKU_APP_NAME_STAGGING }}
           dockerfile_directory: ./
-          dockerfile_name: Dockerfile.prod
+          dockerfile_name: dockerfile.prod
           docker_options: "--no-cache"
           process_type: web
