@@ -14,7 +14,8 @@
     "start": "nodemon --exec sucrase-node src/server.js",
     "test": "jest",
     "lint": "eslint --ext .js,.ts,.tsx src/", 
-    "start:prod": "sucrase ./src -d ./build --transforms imports && node build/server.js"
+    "build": "sucrase ./src -d ./build --transforms imports",
+    "start:prod": "node build/server.js"
   },
   "devDependencies": {
     "dotenv": "^10.0.0",
