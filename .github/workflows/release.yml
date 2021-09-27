@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-     env:
+    env:
       url_user: ${{secrets.URL_USER}}
     steps:
       - uses: actions/checkout@v2
