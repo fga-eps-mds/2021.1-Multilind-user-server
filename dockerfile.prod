@@ -2,10 +2,12 @@ FROM node:16
 
 WORKDIR /app 
 
-COPY ./package.json /app/package.json
+COPY . .
 
 RUN yarn install 
 
-COPY .  /app
+COPY .  .
 
-CMD [ "yarn start:prod" ]
+RUN yarn build 
+
+CMD [ "yarn" ,"start:prod" ]
