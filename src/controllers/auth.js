@@ -86,7 +86,6 @@ class Auth {
     try {
       const { refresh_token } = req.body;
       const { valid, payload } = await validateToken(refresh_token);
-      console.log(valid, payload);
       if (!valid)
         throw {
           status: 400,

@@ -7,10 +7,15 @@ class Db {
 
   init() {
     mongoose
-      .connect(process.env.MONGO_URL, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      })
+      .connect(
+        process.env.NODE_ENV === "test"
+          ? global.__MONGO_URI__
+          : process.env.MONGO_URL,
+        {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        }
+      )
       .then(() => console.log("database connected"));
   }
 }
