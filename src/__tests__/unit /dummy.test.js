@@ -1,5 +1,12 @@
+import { 
+    validateData, 
+    validateToken ,
+    ecrypt, 
+    createToken
+ } from '../../utils'; 
+import AuthController from '../../controllers';
+ 
+
 describe('Dummy test',() => {
-    it('1 + 1 is 2', () => {
-        expect(1+1).toBe(2)
-    })
+    
 })

@@ -10,14 +10,14 @@ class UserValidation {
   async create(req, res, next) {
     const isValid = await UserCreateSchema.isValid(req.body);
     if (!isValid)
-      return res.status(400).json({ message: "invalid credentitals" });
+      return res.status(400).json({ message: "Credenciais inválidas" });
     return next();
   }
 
   async login(req, res, next) {
     const isValid = await UserLoginSchema.isValid(req.body);
     if (!isValid)
-      return res.status(400).json({ message: "invalid credentitals" });
+      return res.status(400).json({ message: "Credenciais inválidas" });
     return next();
   }
   async logout(req, res, next) {

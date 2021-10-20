@@ -2,11 +2,21 @@ import { User, Session } from "../models";
 import { ecrypt, validateData, createToken, validateToken } from "../utils";
 import { pick } from "lodash";
 
+import { ok, serverError, badRequest, noContent } from "../utils/httpResponses";
+
 class Auth {
-  async create(req, res) {
+  async create(httpRequest) {
     try {
-      const { name, email, password } = req.body;
+      const { name, email, password } = httpRequest.body;
+
       const password_hash = await ecrypt(password);
+
+      const isEmailAlreadyUsed = await User.findOne({ email });
+      if (isEmailAlreadyUsed) {
+        return badRequest({
+          message: "Email já está em uso por outro usuário",
+        });
+      }
       const user = await User.create({ name, email, password_hash });
 
       const tokenPayload = { id: user._id };
@@ -18,36 +28,32 @@ class Auth {
       const refresh_token = await createToken(tokenPayload);
 
       await Session.create({ refresh_token });
-
-      return res.json({
+      return ok({
         token,
         refresh_token,
         user: pick(user, ["name", "email"]),
       });
-    } catch (err) {
-      return res
-        .status(err.status || 500)
-        .json({ message: err.message || "Server Error" });
+    } catch (error) {
+      console.error(error);
+      return serverError(error);
     }
   }
-  async auth(req, res) {
+  async login(httpRequest) {
     try {
-      const { email, password } = req.body;
+      const { email, password } = httpRequest.body;
 
       const user = await User.findOne({ email });
       if (!user) {
-        throw {
-          status: 400,
-          message: "invalid credentials",
-        };
+        return badRequest({
+          message: "Credenciais inválidas.",
+        });
       }
 
       const isPasswordValid = await validateData(password, user.password_hash);
       if (!isPasswordValid) {
-        throw {
-          status: 400,
-          message: "invalid credentials",
-        };
+        return badRequest({
+          message: "Credenciais inválidas.",
+        });
       }
 
       const tokenPayload = { id: user._id };
@@ -60,37 +66,36 @@ class Auth {
 
       await Session.create({ refresh_token });
 
-      return res.json({
+      return ok({
         token,
         refresh_token,
         user: pick(user, ["name", "email"]),
       });
-    } catch (err) {
-      return res
-        .status(err.status || 500)
-        .json({ message: err.message || "Server Error" });
+    } catch (error) {
+      console.error(error);
+      return serverError(error);
     }
   }
-  async logout(req, res) {
+
+  async logout(httpRequest) {
     try {
-      const { refresh_token } = req.body;
+      const { refresh_token } = httpRequest.body;
       await Session.deleteOne({ refresh_token });
-      return res.sendStatus(204);
+      return noContent();
     } catch (err) {
-      return res
-        .status(err.status || 500)
-        .json({ message: err.message || "Server Error" });
+      return serverError();
     }
   }
-  async refresh(req, res) {
+  async refresh(httpRequest) {
     try {
-      const { refresh_token } = req.body;
+      const { refresh_token } = httpRequest.body;
       const { valid, payload } = await validateToken(refresh_token);
-      if (!valid)
-        throw {
-          status: 400,
+
+      if (!valid) {
+        return badRequest({
           message: "invalid token",
-        };
+        });
+      }
 
       const isSessionValid = await Session.findOne({ refresh_token });
       if (!isSessionValid)
@@ -101,11 +106,9 @@ class Auth {
 
       const newToken = await createToken(payload);
 
-      return res.json({ token: newToken });
+      return ok({ token: newToken });
     } catch (err) {
-      return res
-        .status(err.status || 500)
-        .json({ message: err.message || "Server Error" });
+      return serverError();
     }
   }
 }
