@@ -37,6 +37,13 @@ describe('Auth Routes', () => {
             .send(mockCreateRequest)
             .expect(200)
       })
+
+      it('Should return 400 on invalid email', async() => {
+        await request(app)
+            .post('/api/auth/create')
+            .send({...mockCreateRequest, email: 'invalid_email'})
+            .expect(400)
+      })
     })
 
     describe('Login', () => {
@@ -49,6 +56,20 @@ describe('Auth Routes', () => {
                 .post('/api/auth/login')
                 .send(mockLoginRequest)
                 .expect(200)
+          })
+
+          it('Should return 400 on invalid email', async() => {
+            await request(app)
+                .post('/api/auth/login')
+                .send({...mockLoginRequest, email: 'invalid_email'})
+                .expect(400)
+          })
+
+          it('Should return 400 if email doesnt exists', async() => {
+            await request(app)
+                .post('/api/auth/login')
+                .send({...mockLoginRequest, email: 'unexistent@email.com'})
+                .expect(400)
           })
 
     })
@@ -66,6 +87,13 @@ describe('Auth Routes', () => {
                 .send({refresh_token: token})
                 .expect(204)
           })
+
+          it('Should return 400 on invalid refresh token', async() => {
+            await request(app)
+                .delete('/api/auth/logout')
+                .send({refresh_token:  null})
+                .expect(400)
+          })
     
     })
 
@@ -80,6 +108,13 @@ describe('Auth Routes', () => {
                 .post('/api/auth/refresh')
                 .send({refresh_token: token})
                 .expect(200)
+          })
+
+          it('Should return 400 on invalid refresh token', async() => {
+            await request(app)
+                .post('/api/auth/refresh')
+                .send({refresh_token: null})
+                .expect(400)
           })
       
     })
