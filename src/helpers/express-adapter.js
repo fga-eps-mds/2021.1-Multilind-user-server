@@ -5,11 +5,11 @@ export const adaptRoute = (controllerMethod) => {
     };
 
     const httpResponse = await controllerMethod(httpRequest);
-    if (httpResponse.statusCode === 200) {
+    if (httpResponse.statusCode >= 200 && httpResponse.statusCode < 400) {
       res.status(httpResponse.statusCode).json(httpResponse.body);
     } else {
       res.status(httpResponse.statusCode).json({
-        message: httpResponse.body.message,
+        message: httpResponse.body?.message,
       });
     }
   };
