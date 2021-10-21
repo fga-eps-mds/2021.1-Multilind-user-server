@@ -4,12 +4,16 @@
  */
 
 module.exports = {
+  transform: {
+    "^.+\\.js?$": "babel-jest",
+  },
+
   preset: "@shelf/jest-mongodb",
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
   // Stop running tests after `n` failures
-  // bail: 0,
+  // bail: 1,
 
   // The directory where Jest should store its cached dependency information
   // cacheDirectory: "/private/var/folders/v2/l8yjvv8578s44p4my2ywwrq00000gn/T/jest_dx",
@@ -163,7 +167,6 @@ module.exports = {
   // timers: "real",
 
   // A map from regular expressions to paths to transformers
-  // transform: undefined,
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   // transformIgnorePatterns: [

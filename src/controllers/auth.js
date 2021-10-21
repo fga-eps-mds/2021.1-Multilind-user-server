@@ -34,7 +34,6 @@ class Auth {
         user: pick(user, ["name", "email"]),
       });
     } catch (error) {
-      console.error(error);
       return serverError(error);
     }
   }
@@ -55,9 +54,7 @@ class Auth {
           message: "Credenciais inválidas.",
         });
       }
-
       const tokenPayload = { id: user._id };
-
       const token = await createToken(tokenPayload, {
         expiresIn: "3600s",
       });
@@ -72,7 +69,7 @@ class Auth {
         user: pick(user, ["name", "email"]),
       });
     } catch (error) {
-      console.error(error);
+      // console.log(error.message || error);
       return serverError(error);
     }
   }
@@ -80,6 +77,12 @@ class Auth {
   async logout(httpRequest) {
     try {
       const { refresh_token } = httpRequest.body;
+      const isSectionActive = await Session.findOne({ refresh_token });
+      if (!isSectionActive) {
+        return badRequest({
+          message: "Não Há sessões ativas para esse email",
+        });
+      }
       await Session.deleteOne({ refresh_token });
       return noContent();
     } catch (err) {
@@ -98,11 +101,11 @@ class Auth {
       }
 
       const isSessionValid = await Session.findOne({ refresh_token });
-      if (!isSessionValid)
-        throw {
-          status: 400,
+      if (!isSessionValid) {
+        return badRequest({
           message: "invalid token",
-        };
+        });
+      }
 
       const newToken = await createToken(payload);
 

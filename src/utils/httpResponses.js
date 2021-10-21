@@ -9,7 +9,7 @@ export const forbidden = (error) => ({
 });
 export const serverError = (error) => ({
   statusCode: 500,
-  body: new ServerError(error.stack),
+  body: new ServerError(error?.stack),
 });
 
 export const unauthorized = () => ({
