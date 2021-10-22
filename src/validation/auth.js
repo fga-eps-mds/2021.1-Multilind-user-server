@@ -11,6 +11,6 @@ export const UserLoginSchema = Yup.object().shape({
   password: Yup.string().required(),
 });
 
-export const UserLogoutSchema = Yup.object().shape({
+export const RefreshTokenSchema = Yup.object().shape({
   refresh_token: Yup.string().required(),
 });

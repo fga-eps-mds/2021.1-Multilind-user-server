@@ -59,13 +59,13 @@ describe("AuthController", () => {
       expect(ecrypt).toHaveBeenCalledWith(mockCreateRequest.body.password);
     });
 
-    it("Should return 500 if encrypt returns an error", async () => {
+    it("Should return 500 if encrypt returns an error from create", async () => {
       ecrypt.mockImplementationOnce(async () => Promise.reject(new Error()));
       const response = await AuthController.create(mockCreateRequest);
       expect(response.statusCode).toBe(500);
     });
 
-    it("Should return 500 if createToken returns an error", async () => {
+    it("Should return 500 if createToken returns an error from create", async () => {
       createToken.mockImplementationOnce(async () =>
         Promise.reject(new Error())
       );
@@ -79,7 +79,7 @@ describe("AuthController", () => {
       expect(response.statusCode).toBe(400);
     });
 
-    it("Should return 200  ", async () => {
+    it("Should return 200 from create", async () => {
       const response = await AuthController.create(mockCreateRequest);
       expect(response.statusCode).toBe(200);
     });
@@ -106,7 +106,7 @@ describe("AuthController", () => {
       expect(response.statusCode).toBe(500);
     });
 
-    it("Should return 500 if createToken returns an error", async () => {
+    it("Should return 500 if createToken returns an error from login", async () => {
       createToken.mockImplementationOnce(async () =>
         Promise.reject(new Error())
       );
@@ -114,7 +114,7 @@ describe("AuthController", () => {
       expect(response.statusCode).toBe(500);
     });
 
-    it("Should return 400 if an email does not exist", async () => {
+    it("Should return 400 if an email does not exist from login", async () => {
       const fakeRequestWithInvalidEmail = {
         body: {
           email: "invalid@teste.com",
@@ -174,12 +174,12 @@ describe("AuthController", () => {
       expect(response.statusCode).toBe(400);
     });
 
-    it("Should return 500 if validateToken returns an error", async () => {
+    it("Should return 500 if validateToken returns an error from refresh", async () => {
       validateToken.mockImplementationOnce(() => Promise.reject(new Error()));
       const response = await AuthController.refresh(mockRefreshRequest);
       expect(response.statusCode).toBe(500);
     });
-    it("Should return 500 if createToken returns an error", async () => {
+    it("Should return 500 if createToken returns an error from refresh", async () => {
       createToken.mockImplementationOnce(() => Promise.reject(new Error()));
       const response = await AuthController.refresh(mockRefreshRequest);
       expect(response.statusCode).toBe(500);

@@ -9,7 +9,7 @@ class Auth {
     try {
       const { name, email, password } = httpRequest.body;
 
-      const password_hash = await ecrypt(password);
+      const passwordHash = await ecrypt(password);
 
       const isEmailAlreadyUsed = await User.findOne({ email });
       if (isEmailAlreadyUsed) {
@@ -17,7 +17,11 @@ class Auth {
           message: "Email já está em uso por outro usuário",
         });
       }
-      const user = await User.create({ name, email, password_hash });
+      const user = await User.create({
+        name,
+        email,
+        password_hash: passwordHash,
+      });
 
       const tokenPayload = { id: user._id };
 
@@ -25,12 +29,12 @@ class Auth {
         expiresIn: "3600s",
       });
 
-      const refresh_token = await createToken(tokenPayload);
+      const refreshToken = await createToken(tokenPayload);
 
-      await Session.create({ refresh_token });
+      await Session.create({ refresh_token: refreshToken });
       return ok({
         token,
-        refresh_token,
+        refresh_token: refreshToken,
         user: pick(user, ["name", "email"]),
       });
     } catch (error) {
@@ -59,31 +63,32 @@ class Auth {
         expiresIn: "3600s",
       });
 
-      const refresh_token = await createToken(tokenPayload);
+      const refreshToken = await createToken(tokenPayload);
 
-      await Session.create({ refresh_token });
+      await Session.create({ refresh_token: refreshToken });
 
       return ok({
         token,
-        refresh_token,
+        refresh_token: refreshToken,
         user: pick(user, ["name", "email"]),
       });
     } catch (error) {
-      // console.log(error.message || error);
       return serverError(error);
     }
   }
 
   async logout(httpRequest) {
     try {
-      const { refresh_token } = httpRequest.body;
-      const isSectionActive = await Session.findOne({ refresh_token });
+      const { refresh_token: refreshToken } = httpRequest.body;
+      const isSectionActive = await Session.findOne({
+        refresh_token: refreshToken,
+      });
       if (!isSectionActive) {
         return badRequest({
           message: "Não Há sessões ativas para esse email",
         });
       }
-      await Session.deleteOne({ refresh_token });
+      await Session.deleteOne({ refresh_token: refreshToken });
       return noContent();
     } catch (err) {
       return serverError();
@@ -91,8 +96,8 @@ class Auth {
   }
   async refresh(httpRequest) {
     try {
-      const { refresh_token } = httpRequest.body;
-      const { valid, payload } = await validateToken(refresh_token);
+      const { refresh_token: refreshToken } = httpRequest.body;
+      const { valid, payload } = await validateToken(refreshToken);
 
       if (!valid) {
         return badRequest({
@@ -100,7 +105,9 @@ class Auth {
         });
       }
 
-      const isSessionValid = await Session.findOne({ refresh_token });
+      const isSessionValid = await Session.findOne({
+        refresh_token: refreshToken,
+      });
       if (!isSessionValid) {
         return badRequest({
           message: "invalid token",
