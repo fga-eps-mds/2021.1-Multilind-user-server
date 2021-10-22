@@ -27,13 +27,7 @@ const getMockLoginRequest = () => ({
   },
 });
 
-const getMockLogoutRequest = () => ({
-  body: {
-    refresh_token: "any_token",
-  },
-});
-
-const getMockRefreshRequest = () => ({
+const getMockRequestWithRefreshToken = () => ({
   body: {
     refresh_token: "any_token",
   },
@@ -163,7 +157,7 @@ describe("AuthController", () => {
     });
 
     it("Should logout", async () => {
-      const mockLogoutRequest = getMockLogoutRequest();
+      const mockLogoutRequest = getMockRequestWithRefreshToken();
       const response = await AuthController.logout(mockLogoutRequest);
       expect(response.statusCode).toBe(204);
     });
@@ -179,7 +173,7 @@ describe("AuthController", () => {
       validateToken.mockImplementationOnce(() =>
         Promise.resolve({ valid: false, payload: "any_payload" })
       );
-      const mockRefreshRequest = getMockRefreshRequest();
+      const mockRefreshRequest = getMockRequestWithRefreshToken();
       const response = await AuthController.refresh(mockRefreshRequest);
       expect(response.statusCode).toBe(400);
     });
@@ -196,25 +190,25 @@ describe("AuthController", () => {
 
     it("Should return 500 if validateToken returns an error from refresh", async () => {
       validateToken.mockImplementationOnce(() => Promise.reject(new Error()));
-      const mockRefreshRequest = getMockRefreshRequest();
+      const mockRefreshRequest = getMockRequestWithRefreshToken();
       const response = await AuthController.refresh(mockRefreshRequest);
       expect(response.statusCode).toBe(500);
     });
     it("Should return 500 if createToken returns an error from refresh", async () => {
       createToken.mockImplementationOnce(() => Promise.reject(new Error()));
-      const mockRefreshRequest = getMockRefreshRequest();
+      const mockRefreshRequest = getMockRequestWithRefreshToken();
       const response = await AuthController.refresh(mockRefreshRequest);
       expect(response.statusCode).toBe(500);
     });
 
     it("Should call create token with the right parameters", async () => {
-      const mockRefreshRequest = getMockRefreshRequest();
+      const mockRefreshRequest = getMockRequestWithRefreshToken();
       await AuthController.refresh(mockRefreshRequest);
       expect(createToken).toBeCalledWith("any_payload");
     });
 
     it("Should create an refresh token", async () => {
-      const mockRefreshRequest = getMockRefreshRequest();
+      const mockRefreshRequest = getMockRequestWithRefreshToken();
       const request = await AuthController.refresh(mockRefreshRequest);
       expect(request.statusCode).toBe(200);
     });
