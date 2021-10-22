@@ -14,6 +14,19 @@ const mockLoginRequest = {
   password: "123456",
 };
 
+const REFRESH_URL = "/api/auth/refresh";
+const LOGOUT_URL = "/api/auth/logout";
+const CREATE_URL = "/api/auth/create";
+const LOGIN_URL = "/api/auth/login";
+
+async function getMockedRefreshToken() {
+  const {
+    body: { refresh_token },
+  } = await AuthController.create({ body: mockCreateRequest });
+
+  return refresh_token;
+}
+
 describe("Auth Routes", () => {
   const db = new Db();
   beforeAll(async () => {
@@ -31,15 +44,12 @@ describe("Auth Routes", () => {
 
   describe("Create", () => {
     it("Should return 200 on Create", async () => {
-      await request(app)
-        .post("/api/auth/create")
-        .send(mockCreateRequest)
-        .expect(200);
+      await request(app).post(CREATE_URL).send(mockCreateRequest).expect(200);
     });
 
     it("Should return 400 on invalid email", async () => {
       await request(app)
-        .post("/api/auth/create")
+        .post(CREATE_URL)
         .send({ ...mockCreateRequest, email: "invalid_email" })
         .expect(400);
     });
@@ -51,22 +61,19 @@ describe("Auth Routes", () => {
     });
 
     it("Should return 200 on Login", async () => {
-      await request(app)
-        .post("/api/auth/login")
-        .send(mockLoginRequest)
-        .expect(200);
+      await request(app).post(LOGIN_URL).send(mockLoginRequest).expect(200);
     });
 
     it("Should return 400 on invalid email", async () => {
       await request(app)
-        .post("/api/auth/login")
+        .post(LOGIN_URL)
         .send({ ...mockLoginRequest, email: "invalid_email" })
         .expect(400);
     });
 
     it("Should return 400 if email doesnt exists", async () => {
       await request(app)
-        .post("/api/auth/login")
+        .post(LOGIN_URL)
         .send({ ...mockLoginRequest, email: "unexistent@email.com" })
         .expect(400);
     });
@@ -75,22 +82,19 @@ describe("Auth Routes", () => {
   describe("Logout", () => {
     let token;
     beforeEach(async () => {
-      const {
-        body: { refresh_token },
-      } = await AuthController.create({ body: mockCreateRequest });
-      token = refresh_token;
+      token = await getMockedRefreshToken();
     });
 
     it("Should return 204 on Logout", async () => {
       await request(app)
-        .delete("/api/auth/logout")
+        .delete(LOGOUT_URL)
         .send({ refresh_token: token })
         .expect(204);
     });
 
     it("Should return 400 on invalid refresh token", async () => {
       await request(app)
-        .delete("/api/auth/logout")
+        .delete(LOGOUT_URL)
         .send({ refresh_token: null })
         .expect(400);
     });
@@ -99,21 +103,18 @@ describe("Auth Routes", () => {
   describe("Refresh", () => {
     let token;
     beforeEach(async () => {
-      const {
-        body: { refresh_token },
-      } = await AuthController.create({ body: mockCreateRequest });
-      token = refresh_token;
+      token = await getMockedRefreshToken();
     });
     it("Should return 200 on Refresh", async () => {
       await request(app)
-        .post("/api/auth/refresh")
+        .post(REFRESH_URL)
         .send({ refresh_token: token })
         .expect(200);
     });
 
     it("Should return 400 on invalid refresh token", async () => {
       await request(app)
-        .post("/api/auth/refresh")
+        .post(REFRESH_URL)
         .send({ refresh_token: null })
         .expect(400);
     });
