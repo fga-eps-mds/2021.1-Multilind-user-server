@@ -38,6 +38,7 @@ class Auth {
         user: pick(user, ["name", "email"]),
       });
     } catch (error) {
+      console.log(error);
       return serverError(error);
     }
   }
@@ -73,6 +74,7 @@ class Auth {
         user: pick(user, ["name", "email"]),
       });
     } catch (error) {
+      console.log(error);
       return serverError(error);
     }
   }
@@ -117,8 +119,9 @@ class Auth {
       const newToken = await createToken(payload);
 
       return ok({ token: newToken });
-    } catch (err) {
-      return serverError(err);
+    } catch (error) {
+      console.log(error);
+      return serverError(error);
     }
   }
 }
