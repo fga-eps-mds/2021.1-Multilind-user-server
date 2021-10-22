@@ -113,6 +113,7 @@ describe("Auth Routes", () => {
       token = await getMockedRefreshToken();
     });
     it("Should return 200 on Refresh", async () => {
+      console.log("TOKEN", token);
       await request(app)
         .post(REFRESH_URL)
         .send({ refresh_token: token })
