@@ -38,7 +38,7 @@ class Auth {
         user: pick(user, ["name", "email"]),
       });
     } catch (error) {
-      console.log(error);
+      console.log(error.message || error);
       return serverError(error);
     }
   }
@@ -74,7 +74,7 @@ class Auth {
         user: pick(user, ["name", "email"]),
       });
     } catch (error) {
-      console.log(error);
+      console.log(error.message || error);
       return serverError(error);
     }
   }
@@ -92,8 +92,9 @@ class Auth {
       }
       await Session.deleteOne({ refresh_token: refreshToken });
       return noContent();
-    } catch (err) {
-      return serverError(err);
+    } catch (error) {
+      console.log(error.message || error);
+      return serverError(error);
     }
   }
   async refresh(httpRequest) {
@@ -120,7 +121,7 @@ class Auth {
 
       return ok({ token: newToken });
     } catch (error) {
-      console.log(error);
+      console.log(error.message || error);
       return serverError(error);
     }
   }
