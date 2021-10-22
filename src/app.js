@@ -1,12 +1,13 @@
 import "dotenv/config";
 import express from "express";
-import "./services/database";
+import { Db } from "./services/database";
 import cors from "cors";
 import { requestInfo } from "./middlewares";
 import { setUpRoutes } from "./routes";
 
 class App {
   constructor() {
+    new Db().init();
     this.app = express();
     this.middlewares();
     this.routes();
