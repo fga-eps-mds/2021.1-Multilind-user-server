@@ -17,7 +17,10 @@ class App {
     this.app.use(requestInfo);
     this.app.use(
       cors({
-        origin: "*",
+        origin:
+          process.env.NODE_ENV == "prod"
+            ? process.env.ORIGIN
+            : "http://localhost:3000",
         allowedHeaders: "*",
       })
     );
