@@ -1,18 +1,24 @@
 import mongoose from "mongoose";
 
-class Db {
-  constructor() {
-    this.init();
-  }
-
-  init() {
-    mongoose
-      .connect(process.env.MONGO_URL, {
+export class Db {
+  async init() {
+    await mongoose.connect(
+      process.env.NODE_ENV === "test"
+        ? global.__MONGO_URI__
+        : process.env.MONGO_URL,
+      {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-      })
-      .then(() => console.log("database connected"));
+      }
+    );
+    console.log("database connected");
+  }
+
+  async close() {
+    await mongoose.connection.close();
+  }
+
+  async dropCollection(collection) {
+    await mongoose.connection.collections[collection].deleteMany({});
   }
 }
-
-export default new Db();

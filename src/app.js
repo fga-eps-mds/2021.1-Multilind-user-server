@@ -1,12 +1,13 @@
 import "dotenv/config";
 import express from "express";
-import "./services/database";
+import { Db } from "./services/database";
 import cors from "cors";
 import { requestInfo } from "./middlewares";
 import { setUpRoutes } from "./routes";
 
 class App {
   constructor() {
+    new Db().init();
     this.app = express();
     this.middlewares();
     this.routes();
@@ -16,7 +17,10 @@ class App {
     this.app.use(requestInfo);
     this.app.use(
       cors({
-        origin: "*",
+        origin:
+          process.env.NODE_ENV == "prod"
+            ? process.env.ORIGIN
+            : "http://localhost:3000",
         allowedHeaders: "*",
       })
     );

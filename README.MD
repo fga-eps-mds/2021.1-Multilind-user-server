@@ -52,6 +52,6 @@ ou
 sudo docker-compose up --build
 ```
 
-2. O backend estará disponível em: `http://localhost:3000/api/auth`.
+2. O backend estará disponível em: `http://localhost:3333/api/auth`.
 
 
