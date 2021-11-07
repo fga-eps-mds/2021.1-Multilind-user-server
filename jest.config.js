@@ -14,17 +14,6 @@ module.exports = {
   coveragePathIgnorePatterns: ["/node_modules/"],
   coverageProvider: "v8",
   coverageReporters: ["json", "text", "lcov", "clover"],
-  reporters: [
-    "default",
-    [
-      "jest-sonar",
-      {
-        outputDirectory: "coverage",
-        outputName: "test-report.xml",
-        reportedFilePath: "relative",
-      },
-    ],
-  ],
-
+  testResultsProcessor: "jest-sonar-reporter",
   testMatch: ["**/tests/**/*.[jt]s?(x)", "**/?(*.)+(spec|test).[tj]s?(x)"],
 };
