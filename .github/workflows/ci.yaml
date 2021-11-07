@@ -21,3 +21,9 @@ jobs:
       - run: npm run test
         env:
           JWT_SECRET: multilind_2021
+
+      - name: SonarCloud Scan
+      - uses: SonarSource/sonarcloud-github-action@v1.4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
