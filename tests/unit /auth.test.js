@@ -1,6 +1,11 @@
-import { validateData, validateToken, ecrypt, createToken } from "../../utils";
+import {
+  validateData,
+  validateToken,
+  ecrypt,
+  createToken,
+} from "../../src/utils";
 
-jest.mock("../../utils", () => ({
+jest.mock("../../src/utils", () => ({
   validateData: jest.fn(() => Promise.resolve(true)),
   validateToken: jest.fn(() =>
     Promise.resolve({ valid: true, payload: "any_payload" })
@@ -9,8 +14,8 @@ jest.mock("../../utils", () => ({
   createToken: jest.fn(() => Promise.resolve("any_token")),
 }));
 
-import { Db } from "../../services/database";
-import { AuthController } from "../../controllers";
+import { Db } from "../../src/services/database";
+import { AuthController } from "../../src/controllers";
 
 const getMockCreateRequest = () => ({
   body: {
