@@ -1,7 +1,7 @@
 import request from "supertest";
-import app from "../../app";
-import { Db } from "../../services/database";
-import { AuthController } from "../../controllers";
+import app from "../../src/app";
+import { Db } from "../../src/services/database";
+import { AuthController } from "../../src/controllers";
 
 const getMockCreateRequest = () => ({
   email: "test@teste.com",
@@ -113,7 +113,6 @@ describe("Auth Routes", () => {
       token = await getMockedRefreshToken();
     });
     it("Should return 200 on Refresh", async () => {
-      console.log("TOKEN", token);
       await request(app)
         .post(REFRESH_URL)
         .send({ refresh_token: token })
